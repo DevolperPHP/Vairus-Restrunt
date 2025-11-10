@@ -1,0 +1,52 @@
+<%- include('partials/header', { title: item.name, user: user }) %>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a href="/">الرئيسية</a>
+        <span>/</span>
+        <% if (category) { %>
+            <a href="/#category-<%= category._id %>"><%= category.name %></a>
+            <span>/</span>
+        <% } %>
+        <span class="current"><%= item.name %></span>
+    </div>
+
+    <div class="item-detail-page">
+        <div class="item-detail-image">
+            <% if (item.image && item.image !== 'noImage.png') { %>
+                <img src="<%= item.image %>" alt="<%= item.name %>">
+            <% } else { %>
+                <div class="placeholder-image-large">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="item-detail-info">
+            <div class="item-detail-header">
+                <h1 class="item-detail-name"><%= item.name %></h1>
+                <% if (category) { %>
+                    <span class="item-detail-category"><%= category.name %></span>
+                <% } %>
+            </div>
+
+            <% if (item.des) { %>
+                <div class="item-detail-description">
+                    <h3>الوصف</h3>
+                    <p><%= item.des %></p>
+                </div>
+            <% } %>
+
+            <div class="item-detail-price-card">
+                <div class="price-label">السعر</div>
+                <div class="price-value"><%= item.price %> د.ع</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

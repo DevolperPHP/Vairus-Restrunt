@@ -1,65 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const User = require('../models/User')
-const moment = require('moment');
-const isLogginMiddleWare = require('../middlewares/isUser');
-
-router.get('/sign-up', async (req, res) => {
-    try {
-        const id = req.cookies.id
-        const user = await User.findOne({ _id: id })
-        if (user) {
-            res.redirect('/')
-        } else {
-            res.render('passport/sign-up', {
-                err: req.flash('error'),
-                user: user,
-            })
-        }
-    } catch (err) {
-        console.log(err);
-    }
-})
-
-router.post('/sign-up', async (req, res) => {
-    try {
-        const { name, email, password } = req.body
-        const filter = await User.findOne({ email: email })
-        if (filter) {
-            req.flash('error', 'email unique')
-            res.redirect("/passport/sign-in")
-        } else {
-            const hashedPassword = await bcrypt.hash(password, 10)
-            const newUser = [
-                new User({
-                    name: name,
-                    email: email,
-                    password: hashedPassword,
-                })
-            ]
-
-            newUser.forEach(user => {
-                user.save()
-            })
-            req.flash('success', 'success')
-            res.redirect("/passport/sign-in")
-        }
-    } catch (err) {
-        console.log(err);
-    }
-})
+const User = require('../../models/User')
 
 router.get('/sign-in', async (req, res) => {
     try {
-        const id = req.cookies.id
-        const user = await User.findOne({ _id: id })
-
-        if (user) {
+        if (req.session.userId) {
             res.redirect("/")
         } else {
             res.render('passport/sign-in', {
-                user: user,
                 err: req.flash('error'),
             })
         }
@@ -77,14 +26,14 @@ router.post('/sign-in', async (req, res) => {
             const compare = await bcrypt.compare(password, userData.password)
 
             if(compare){
-                res.cookie("id", userData.id, { maxAge: moment().add(4, "months") })
+                req.session.userId = userData.id
                 res.redirect("/")
             } else {
-                req.flash('error', 'error')
+                req.flash('error', 'بيانات الدخول غير صحيحة')
                 res.redirect('/passport/sign-in')
             }
         } else {
-            req.flash('error', 'error')
+            req.flash('error', 'بيانات الدخول غير صحيحة')
             res.redirect('/passport/sign-in')
         }
 
@@ -93,9 +42,9 @@ router.post('/sign-in', async (req, res) => {
     }
 })
 
-router.post('/sign-out', isLogginMiddleWare, async (req, res) => {
+router.post('/sign-out', async (req, res) => {
     try {
-        res.clearCookie("id")
+        req.session.destroy()
         res.redirect("/passport/sign-in")
     } catch (err) {
         console.log(err);

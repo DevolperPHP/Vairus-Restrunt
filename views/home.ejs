@@ -1,0 +1,85 @@
+<%- include('partials/header', { title: 'الرئيسية', user: user }) %>
+
+<div class="container">
+    <div class="hero-section">
+        <h1 class="hero-title">مرحباً بكم في Virus Gaming</h1>
+        <p class="hero-subtitle">تجربة طعام استثنائية في أجواء ترفيهية مميزة</p>
+    </div>
+
+    <% if (categories.length === 0) { %>
+        <div class="empty-state">
+            <p>لا توجد فئات متاحة حالياً. يرجى المحاولة لاحقاً.</p>
+        </div>
+    <% } %>
+
+    <% if (categories.length > 0) { %>
+    <div class="category-slider">
+        <div class="category-slider-container">
+            <% categories.forEach((category, index) => { %>
+                <a href="#category-<%= category._id %>" class="category-slider-item" onclick="scrollToCategory('<%= category._id %>'); return false;">
+                    <div class="category-slider-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                        </svg>
+                    </div>
+                    <span class="category-slider-name"><%= category.name %></span>
+                </a>
+            <% }) %>
+        </div>
+    </div>
+    <% } %>
+
+    <% categories.forEach((category, index) => { %>
+        <section class="category-section" id="category-<%= category._id %>">
+            <h2 class="category-title"><%= category.name %></h2>
+            <div class="items-grid-compact">
+                <% const categoryItems = items.filter(item => item.category.toString() === category._id.toString()) %>
+
+                <% if (categoryItems.length === 0) { %>
+                    <div class="empty-state">
+                        <p>لا توجد منتجات في هذه الفئة حالياً</p>
+                    </div>
+                <% } %>
+
+                <% categoryItems.forEach(item => { %>
+                    <a href="/item/<%= item._id %>" class="item-card-compact">
+                        <div class="item-image-compact">
+                            <% if (item.image && item.image !== 'noImage.png') { %>
+                                <img src="<%= item.image %>" alt="<%= item.name %>">
+                            <% } else { %>
+                                <div class="placeholder-image-small">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                        <polyline points="21 15 16 10 5 21"/>
+                                    </svg>
+                                </div>
+                            <% } %>
+                            <div class="item-overlay">
+                                <h3 class="item-name-compact"><%= item.name %></h3>
+                                <% if (item.des) { %>
+                                    <p class="item-description-compact"><%= item.des.length > 60 ? item.des.substring(0, 60) + '...' : item.des %></p>
+                                <% } %>
+                                <span class="item-price-compact"><%= item.price %> د.ع</span>
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        </section>
+    <% }) %>
+</div>
+
+<script>
+function scrollToCategory(categoryId) {
+    const element = document.getElementById('category-' + categoryId);
+    if (element) {
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+}
+</script>
+
+<%- include('partials/footer') %>

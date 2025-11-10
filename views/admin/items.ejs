@@ -1,0 +1,183 @@
+<%- include('../partials/header', { title: 'إدارة المنتجات', user: user }) %>
+
+<div class="container admin-container">
+    <div class="admin-header">
+        <h1>إدارة المنتجات</h1>
+        <p>إضافة وتعديل المنتجات في القائمة</p>
+    </div>
+
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>إضافة منتج جديد</h2>
+        </div>
+
+        <div class="add-product-card">
+            <form action="/item/add" method="POST" enctype="multipart/form-data" class="product-form" onsubmit="console.log('Form submitted')">
+                <div class="form-grid">
+                    <div class="form-column">
+                        <div class="form-group-card">
+                            <label for="item-name">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 6L9 17l-5-5"/>
+                                </svg>
+                                اسم المنتج *
+                            </label>
+                            <input type="text" id="item-name" name="name" placeholder="مثال: برجر دبل تشيز كلاسيك" required>
+                        </div>
+
+                        <div class="form-group-card">
+                            <label for="item-des">الوصف</label>
+                            <textarea id="item-des" name="des" placeholder="اكتب وصفاً جذاباً للمنتج..."></textarea>
+                        </div>
+
+                        <div class="form-group-card">
+                            <label for="item-price">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                السعر (د.ع) *
+                            </label>
+                            <input type="number" id="item-price" name="price" placeholder="0.00" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-column">
+                        <div class="form-group-card">
+                            <label for="item-category">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                                </svg>
+                                الفئة *
+                            </label>
+                            <select id="item-category" name="category" required>
+                                <option value="">اختر الفئة</option>
+                                <% categories.forEach(category => { %>
+                                    <option value="<%= category._id %>"><%= category.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-group-card">
+                            <label for="item-image">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                صورة المنتج
+                            </label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="item-image" name="image" accept="image/*" onchange="previewImage(this)">
+                                <div class="file-input-label">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="17 8 12 3 7 8"/>
+                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                    </svg>
+                                    <span>اسحب الصورة هنا أو انقر للاختيار</span>
+                                </div>
+                                <div class="image-preview" id="imagePreview" style="display: none;">
+                                    <img id="previewImg" src="" alt="Preview">
+                                    <button type="button" class="remove-image" onclick="removeImage()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="18" y1="6" x2="6" y2="18"/>
+                                            <line x1="6" y1="6" x2="18" y2="18"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <small class="form-help">الصيغ المدعومة: JPG, PNG, GIF, WEBP (حتى 5 ميجابايت)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        إضافة المنتج
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>المنتجات الحالية</h2>
+            <span class="items-count"><%= items.length %> منتج</span>
+        </div>
+
+        <% if (items.length === 0) { %>
+            <div class="empty-state">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 8v8M8 12h8"/>
+                </svg>
+                <p>لا توجد منتجات مضافة حتى الآن</p>
+                <p class="empty-hint">ابدأ بإضافة منتجك الأول من النموذج أعلاه</p>
+            </div>
+        <% } else { %>
+            <div class="items-grid-admin">
+                <% items.forEach(item => { %>
+                    <div class="item-card-admin">
+                        <div class="item-image-admin">
+                            <% if (item.image && item.image !== 'noImage.png') { %>
+                                <img src="<%= item.image %>" alt="<%= item.name %>">
+                            <% } else { %>
+                                <div class="placeholder-image-small">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                        <polyline points="21 15 16 10 5 21"/>
+                                    </svg>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <div class="item-content-admin">
+                            <div class="item-header-admin">
+                                <h3 class="item-name-admin"><%= item.name %></h3>
+                                <span class="item-price-admin"><%= item.price %> د.ع</span>
+                            </div>
+
+                            <% if (item.des) { %>
+                                <p class="item-description-admin"><%= item.des %></p>
+                            <% } %>
+
+                            <div class="item-meta-admin">
+                                <% const category = categories.find(c => c._id.toString() === item.category.toString()) %>
+                                <span class="item-category-badge">
+                                    <%= category ? category.name : 'غير محدد' %>
+                                </span>
+                            </div>
+
+                            <div class="item-actions-admin">
+                                <a href="/admin/items/edit/<%= item._id %>" class="btn btn-small btn-secondary">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                    تعديل
+                                </a>
+                                <form action="/item/delete/<%= item._id %>" method="POST" class="delete-form" onsubmit="return confirm('هل أنت متأكد من حذف هذا المنتج؟')">
+                                    <button type="submit" class="btn btn-small btn-danger">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="3 6 5 6 21 6"/>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                        </svg>
+                                        حذف
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,71 @@
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Virus Gaming Center</p>
+        </div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script>
+        function initGamingMatrix() {
+            const matrixContainer = document.getElementById('gamingMatrix');
+            if (!matrixContainer) return;
+
+            const gamingIcons = [
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM7 7h10v2H7V7zm0 4h10v2H7v-2z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l4 4-4 4-4-4 4-4zm0 6l4 4-4 4-4-4 4-4zm0 6l4 4-4 4-4-4 4-4z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.84L19.53 19H4.47L12 5.84z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l2 11 5-3 5 3 2-11-2 11zm2.77-7H6.14l1.06-5.27L7 9.89l-.77-1.89L5.5 9h2.27z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l-2 4h4l-2 4 2 4h-4l-2 4h6v-2l-2 4h6l2-4h-4l2-4 2 4h4l-2-4h4l2-4h-6v2l2-4H8l2-4H4l2 4H2l2-4z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 10h16v10H4z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l-3 3h6l-3-3zM12 6l-3 3h6l-3-3zM12 10l-3 3h6l-3-3z"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></svg>',
+                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
+            ];
+
+            const numColumns = Math.floor(window.innerWidth / 80);
+            const numLayers = 2;
+            const charsPerColumn = Math.floor(window.innerHeight / 80) + 2;
+
+            for (let layer = 0; layer < numLayers; layer++) {
+                const layerDiv = document.createElement('div');
+                layerDiv.className = 'matrix-layer';
+
+                for (let col = 0; col < numColumns; col++) {
+                    for (let i = 0; i < charsPerColumn; i++) {
+                        const char = document.createElement('span');
+                        char.className = `matrix-char layer-${layer + 1}`;
+                        char.innerHTML = gamingIcons[Math.floor(Math.random() * gamingIcons.length)];
+
+                        const leftPos = Math.random() * window.innerWidth;
+                        const delay = Math.random() * 10;
+                        const duration = 4 + (layer * 3) + (Math.random() * 2);
+
+                        char.style.left = leftPos + 'px';
+                        char.style.animationDelay = `-${delay}s`;
+                        char.style.animationDuration = duration + 's';
+
+                        layerDiv.appendChild(char);
+                    }
+                }
+
+                matrixContainer.appendChild(layerDiv);
+            }
+        }
+
+        window.addEventListener('load', initGamingMatrix);
+        window.addEventListener('resize', () => {
+            const matrixContainer = document.getElementById('gamingMatrix');
+            if (matrixContainer) {
+                matrixContainer.innerHTML = '';
+                setTimeout(initGamingMatrix, 100);
+            }
+        });
+    </script>
+</body>
+</html>

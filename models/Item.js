@@ -10,6 +10,15 @@ const itemModel = mongoose.Schema({
         default: null,
     },
 
+    price: {
+        type: Number,
+    },
+
+    category:{
+        type: String,
+        required: true,
+    },
+
     image: {
         type: String,
         default: 'noImage.png'
