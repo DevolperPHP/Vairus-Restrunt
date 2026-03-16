@@ -1457,6 +1457,100 @@ body::before {
     border-radius: var(--radius-lg);
 }
 
+.search-filter-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.search-input-wrapper,
+.filter-select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(132, 255, 88, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 0 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-select-wrapper {
+    min-width: 180px;
+}
+
+.search-input-wrapper:focus-within,
+.filter-select-wrapper:focus-within {
+    border-color: rgba(132, 255, 88, 0.4);
+    box-shadow: 0 0 20px rgba(132, 255, 88, 0.08);
+}
+
+.search-input-wrapper svg,
+.filter-select-wrapper svg {
+    color: var(--green-70);
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.search-filter-bar input[type="text"],
+.search-filter-bar select {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    padding: 1rem 0;
+    width: 100%;
+    font-family: inherit;
+}
+
+.search-filter-bar input[type="text"]::placeholder {
+    color: var(--text-quaternary);
+}
+
+.search-filter-bar select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.search-filter-bar select option {
+    background: var(--primary-70);
+    color: var(--text-primary);
+}
+
+.no-results-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-tertiary);
+}
+
+.no-results-state svg {
+    margin-bottom: 1.5rem;
+    opacity: 0.3;
+}
+
+.no-results-state p {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .search-filter-bar {
+        flex-direction: column;
+    }
+    .search-input-wrapper,
+    .filter-select-wrapper {
+        min-width: 100%;
+    }
+}
+
 .add-product-card {
     background: linear-gradient(180deg, var(--primary-70), var(--primary-60));
     border-radius: var(--radius-2xl);
